@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SimpliRoute — Mapa Conceptual del Pipeline Outbound</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0f172a; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+const LOOM_URL = "https://www.loom.com/embed/75d1c635e2de43b388d19ce2cb130bf2";
+const GOOGLE_DOC_URL = "https://docs.google.com/document/d/1wLOP2d6x1gL_wFlWNK_UhilRS3gfSXQYLapCYGw8riU/edit?tab=t.0";
+const CLAY_TABLE_URL = "https://app.clay.com/workspaces/580601/workbooks/wb_0t4gcw0v32bjwPFbHBP/tables/t_0t4gcw2DfQbuRW7YT55/views/gv_0t4gcw2sJpwpQ5zteHZ";
+
+const weeks = [
+  {
+    id: 1,
+    label: "Semana 1",
+    icon: "\u{1F4CB}",
+    title: "Fuentes de Datos & ICP",
+    loomLabel: "Encontrar y calificar empresas en Clay",
+    loomUrl: LOOM_URL,
+    docUrl: GOOGLE_DOC_URL,
+    clayUrl: CLAY_TABLE_URL,
+    sections: [
+      {
+        title: "DOCUMENTACI\u00D3N BASE",
+        color: "#6366f1",
+        items: ["ICP SimpliRoute", "Buyer Personas", "Segmentos Pain-Based", "Mercados LATAM"]
+      },
+      {
+        title: "FUENTES DE DATOS",
+        color: "#f59e0b",
+        items: ["Apollo.io", "Clay", "LinkedIn Sales Nav", "Fuentes complementarias"]
+      },
+      {
+        title: "OUTPUT",
+        color: "#ef4444",
+        items: ["Listas crudas importadas en Clay", "Filtros iniciales aplicados (pa\u00EDs, industria, tama\u00F1o)"]
+      }
+    ],
+    flow: [
+      { step: "S1", name: "Data Sources", detail: "Apollo \u00B7 Clay \u00B7 LinkedIn", color: "#1e293b", border: "#475569" },
+      { step: "S2", name: "ICP Scoring", detail: "Clay AI + F\u00F3rmulas", color: "#1e293b", border: "#475569" }
+    ]
+  },
+  {
+    id: 2,
+    label: "Semana 2",
+    icon: "\u{1F3AF}",
+    title: "Enriquecimiento & Scoring en Clay",
+    loomLabel: null,
+    loomUrl: null,
+    docUrl: GOOGLE_DOC_URL,
+    clayUrl: CLAY_TABLE_URL,
+    sections: [
+      {
+        title: "ENRICHMENT CLAY",
+        color: "#6366f1",
+        items: [
+          "company_size_range (Company Enrichment)",
+          "industry_verified (Company Enrichment)",
+          "website_description (Website Scrape AI)",
+          "has_own_fleet (AI + Website Scrape)",
+          "ecommerce_signal (Technology Lookup)",
+          "job_openings_logistics (Job Postings)"
+        ]
+      },
+      {
+        title: "SCORING ICP",
+        color: "#f59e0b",
+        items: [
+          "Industria = Retail/CPG/Dist \u2192 +3pts",
+          "Headcount 51-1,000 \u2192 +2pts",
+          "Flota propia en web \u2192 +3pts",
+          "E-commerce signal \u2192 +1pt",
+          "Job opening log\u00EDstica \u2192 +1pt",
+          "Total posible: 10pts"
+        ]
+      },
+      {
+        title: "OUTPUT",
+        color: "#ef4444",
+        items: [
+          "icp_score (1-10)",
+          "icp_tier (A \u22657 \u00B7 B 5-6 \u00B7 C <5)",
+          "personalization_line (AI Claude)",
+          "SimpliRoute Fit Analysis"
+        ]
+      }
+    ],
+    flow: [
+      { step: "S2", name: "ICP Scoring", detail: "Clay AI + F\u00F3rmulas", color: "#312e81", border: "#6366f1" },
+      { step: "S2", name: "Verificaci\u00F3n", detail: "MV \u00B7 BounceBan", color: "#4c1d95", border: "#8b5cf6" }
+    ]
+  },
+  {
+    id: 3,
+    label: "Semana 3",
+    icon: "\u{1F4E7}",
+    title: "Verificaci\u00F3n & Campa\u00F1as",
+    loomLabel: null,
+    loomUrl: null,
+    docUrl: GOOGLE_DOC_URL,
+    sections: [
+      {
+        title: "VERIFICACI\u00D3N EMAIL",
+        color: "#6366f1",
+        items: [
+          "Million Verifier (bulk verify)",
+          "BounceBan (catch-all filter)",
+          "Eliminar Unavailable / Invalid",
+          "Solo Tier A + B pasan"
+        ]
+      },
+      {
+        title: "CAMPA\u00D1AS INSTANTLY",
+        color: "#f59e0b",
+        items: [
+          "Secuencias por Tier (A vs B)",
+          "Variables: {{company}}, {{personalization_line}}",
+          "Warmup de dominios",
+          "Follow-up autom\u00E1tico x3"
+        ]
+      },
+      {
+        title: "OUTPUT",
+        color: "#ef4444",
+        items: [
+          "Emails verificados enviados",
+          "M\u00E9tricas: open rate, reply rate",
+          "Respuestas positivas a pipeline"
+        ]
+      }
+    ],
+    flow: [
+      { step: "S3", name: "Campa\u00F1as", detail: "Instantly", color: "#064e3b", border: "#10b981" },
+      { step: "S4", name: "Automatizaci\u00F3n", detail: "Make Workflows", color: "#713f12", border: "#f59e0b" }
+    ]
+  },
+  {
+    id: 4,
+    label: "Semana 4",
+    icon: "\u26A1",
+    title: "Automatizaci\u00F3n & CRM",
+    loomLabel: null,
+    loomUrl: null,
+    docUrl: GOOGLE_DOC_URL,
+    sections: [
+      {
+        title: "MAKE WORKFLOWS",
+        color: "#6366f1",
+        items: [
+          "Instantly \u2192 Salesforce (respuestas)",
+          "Clay \u2192 Salesforce (nuevos leads)",
+          "Notificaciones Slack",
+          "Actualizaci\u00F3n autom\u00E1tica de stages"
+        ]
+      },
+      {
+        title: "SALESFORCE CRM",
+        color: "#f59e0b",
+        items: [
+          "Leads auto-creados desde Make",
+          "Campos custom: icp_tier, icp_score",
+          "Pipeline tracking",
+          "Reportes de conversi\u00F3n"
+        ]
+      },
+      {
+        title: "OUTPUT",
+        color: "#ef4444",
+        items: [
+          "Meetings agendados (Booked)",
+          "Pipeline activo en Salesforce",
+          "Dashboard de m\u00E9tricas outbound"
+        ]
+      }
+    ],
+    flow: [
+      { step: "S4", name: "CRM", detail: "Salesforce", color: "#7c2d12", border: "#f97316" },
+      { step: "S4", name: "Meetings", detail: "Booked", color: "#831843", border: "#ec4899" }
+    ]
+  }
+];
+
+const toolStack = [
+  { name: "Apollo", role: "Data" },
+  { name: "Clay", role: "Enrich + Score", highlight: true },
+  { name: "Million Verifier", role: "Verify", highlight: true },
+  { name: "BounceBan", role: "Verify", highlight: true },
+  { name: "Instantly", role: "Outreach", highlight: true },
+  { name: "Make", role: "Automate" },
+  { name: "Salesforce", role: "CRM" }
+];
+
+const fullFlow = [
+  { step: "S1", name: "Data Sources", detail: "Apollo \u00B7 Clay \u00B7 LinkedIn", color: "#1e293b", border: "#475569" },
+  { step: "S2", name: "ICP Scoring", detail: "Clay AI + F\u00F3rmulas", color: "#1e293b", border: "#475569" },
+  { step: "S2", name: "Verificaci\u00F3n", detail: "MV \u00B7 BounceBan", color: "#4c1d95", border: "#8b5cf6" },
+  { step: "S3", name: "Campa\u00F1as", detail: "Instantly", color: "#064e3b", border: "#10b981" },
+  { step: "S4", name: "Automatizaci\u00F3n", detail: "Make Workflows", color: "#713f12", border: "#f59e0b" },
+  { step: "S4", name: "CRM", detail: "Salesforce", color: "#7c2d12", border: "#f97316" },
+  { step: "", name: "Meetings", detail: "\u{1F4C5} Booked", color: "#831843", border: "#ec4899" }
+];
+
+const Arrow = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0, opacity: 0.4 }}>
+    <path d="M5 12h14M13 6l6 6-6 6" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+function MapaConceptualOutbound() {
+  const [activeWeek, setActiveWeek] = useState(0);
+  const week = weeks[activeWeek];
+
+  return (
+    <div style={{
+      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+      background: "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)",
+      color: "#e2e8f0",
+      minHeight: "100vh",
+      padding: "32px 24px"
+    }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+        <p style={{
+          fontSize: 11, letterSpacing: 3, color: "#f59e0b", textTransform: "uppercase",
+          margin: "0 0 8px", fontWeight: 600
+        }}>
+          SimpliRoute — Outbound Marketing
+        </p>
+        <h1 style={{ fontSize: 32, fontWeight: 700, margin: "0 0 6px", color: "#f1f5f9" }}>
+          Mapa Conceptual del Pipeline
+        </h1>
+        <p style={{ fontSize: 14, color: "#94a3b8", margin: 0 }}>
+          Flujo completo: desde fuentes de datos hasta meetings en Salesforce
+        </p>
+
+        {/* Tool Stack */}
+        <div style={{ margin: "28px 0 24px" }}>
+          <p style={{ fontSize: 10, letterSpacing: 2, color: "#64748b", textTransform: "uppercase", margin: "0 0 12px", fontWeight: 600 }}>
+            Stack de Herramientas
+          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+            {toolStack.map((tool, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div style={{
+                  padding: "8px 16px",
+                  background: tool.highlight ? "linear-gradient(135deg, #1e293b, #334155)" : "#1e293b",
+                  border: `1px solid ${tool.highlight ? "#475569" : "#334155"}`,
+                  borderRadius: 8,
+                  textAlign: "center"
+                }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: "#f1f5f9" }}>{tool.name}</div>
+                  <div style={{ fontSize: 10, color: "#94a3b8" }}>{tool.role}</div>
+                </div>
+                {i < toolStack.length - 1 && <Arrow />}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Week Tabs */}
+        <div style={{ display: "flex", gap: 4, margin: "0 0 28px", flexWrap: "wrap" }}>
+          {weeks.map((w, i) => (
+            <button
+              key={w.id}
+              onClick={() => setActiveWeek(i)}
+              style={{
+                padding: "10px 20px",
+                borderRadius: 8,
+                border: activeWeek === i ? "1px solid #475569" : "1px solid transparent",
+                background: activeWeek === i
+                  ? "linear-gradient(135deg, #334155, #1e293b)"
+                  : "transparent",
+                color: activeWeek === i ? "#f1f5f9" : "#64748b",
+                fontSize: 13,
+                fontWeight: activeWeek === i ? 600 : 400,
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                display: "flex",
+                alignItems: "center",
+                gap: 8
+              }}
+            >
+              <span>{w.icon}</span>
+              <span>{w.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Week Content */}
+        <div style={{
+          background: "linear-gradient(135deg, #1e293b, #0f172a)",
+          border: "1px solid #334155",
+          borderRadius: 16,
+          padding: "28px",
+          marginBottom: 24
+        }}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
+            <div>
+              <h2 style={{ fontSize: 24, fontWeight: 700, margin: "0 0 4px", color: "#f1f5f9" }}>
+                <span style={{ marginRight: 10 }}>{week.icon}</span>
+                {week.title}
+              </h2>
+              {week.loomLabel && (
+                <p style={{ fontSize: 12, color: "#f59e0b", margin: "4px 0 0", letterSpacing: 1, textTransform: "uppercase" }}>
+                  Loom — {week.loomLabel}
+                </p>
+              )}
+            </div>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <a
+                href={week.docUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "8px 14px",
+                  background: "linear-gradient(135deg, #1a4731, #064e3b)",
+                  border: "1px solid #10b981",
+                  borderRadius: 8,
+                  color: "#6ee7b7",
+                  fontSize: 12,
+                  fontWeight: 500,
+                  textDecoration: "none",
+                  transition: "all 0.2s ease",
+                  whiteSpace: "nowrap"
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                Doc ICP & Filtros
+              </a>
+              {week.clayUrl && (
+                <a
+                  href={week.clayUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    padding: "8px 14px",
+                    background: "linear-gradient(135deg, #2d1b69, #4c1d95)",
+                    border: "1px solid #8b5cf6",
+                    borderRadius: 8,
+                    color: "#c4b5fd",
+                    fontSize: 12,
+                    fontWeight: 500,
+                    textDecoration: "none",
+                    transition: "all 0.2s ease",
+                    whiteSpace: "nowrap"
+                  }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <line x1="3" y1="9" x2="21" y2="9"/>
+                    <line x1="3" y1="15" x2="21" y2="15"/>
+                    <line x1="9" y1="3" x2="9" y2="21"/>
+                  </svg>
+                  Clay Table Ejemplo
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Loom Embed */}
+          {week.loomUrl && (
+            <div style={{
+              marginBottom: 24,
+              borderRadius: 12,
+              overflow: "hidden",
+              border: "1px solid #334155",
+              background: "#000"
+            }}>
+              <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
+                <iframe
+                  src={week.loomUrl}
+                  frameBorder="0"
+                  allowFullScreen={true}
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%"
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Content Sections */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16, marginBottom: 24 }}>
+            {week.sections.map((section, i) => (
+              <div key={i} style={{
+                border: `1px solid ${section.color}33`,
+                borderRadius: 12,
+                padding: "16px 20px",
+                background: `${section.color}08`
+              }}>
+                <p style={{
+                  fontSize: 10, letterSpacing: 2, color: section.color,
+                  textTransform: "uppercase", margin: "0 0 12px", fontWeight: 700
+                }}>
+                  {section.title}
+                </p>
+                {section.items.map((item, j) => (
+                  <div key={j} style={{
+                    display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 6
+                  }}>
+                    <span style={{ color: section.color, fontSize: 8, marginTop: 5, flexShrink: 0 }}>{"\u25CF"}</span>
+                    <span style={{ fontSize: 13, color: "#cbd5e1", lineHeight: 1.4 }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+
+          {/* Flow */}
+          <div>
+            <p style={{ fontSize: 10, letterSpacing: 2, color: "#64748b", textTransform: "uppercase", margin: "0 0 12px", fontWeight: 600 }}>
+              Flujo End-to-End
+            </p>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+              {fullFlow.map((f, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div style={{
+                    padding: "10px 16px",
+                    background: f.color,
+                    border: `1px solid ${f.border}`,
+                    borderRadius: 10,
+                    textAlign: "center",
+                    minWidth: 100,
+                    opacity: week.flow.some(wf => wf.name === f.name) ? 1 : 0.35,
+                    transition: "opacity 0.3s ease"
+                  }}>
+                    {f.step && (
+                      <span style={{
+                        fontSize: 9, color: f.border, fontWeight: 700,
+                        display: "block", marginBottom: 2
+                      }}>
+                        {f.step}
+                      </span>
+                    )}
+                    <div style={{ fontSize: 13, fontWeight: 600, color: "#f1f5f9" }}>{f.name}</div>
+                    <div style={{ fontSize: 10, color: "#94a3b8" }}>{f.detail}</div>
+                  </div>
+                  {i < fullFlow.length - 1 && <Arrow />}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          fontSize: 11,
+          color: "#475569",
+          padding: "8px 0",
+          borderTop: "1px solid #1e293b",
+          flexWrap: "wrap",
+          gap: 8
+        }}>
+          <span>Programa de Entrenamiento Outbound {"\u00B7"} SimpliRoute</span>
+          <span>Formato: 1 Loom semanal {"\u00B7"} 4 semanas {"\u00B7"} Documentaci{"\u00F3"}n de soporte incluida</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(React.createElement(MapaConceptualOutbound), document.getElementById('root'));
+</script>
+</body>
+</html>
