@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SimpliRoute — Mapa Conceptual del Pipeline Outbound</title>
+<title>SimpliRoute â Mapa Conceptual del Pipeline Outbound</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
@@ -20,6 +20,7 @@ body { background: #0f172a; }
 const { useState } = React;
 
 const LOOM_URL = "https://www.loom.com/embed/75d1c635e2de43b388d19ce2cb130bf2";
+const LOOM_URL_2 = "https://www.loom.com/embed/7fe8a85020c94f1ea8b2783e82cffe30";
 const GOOGLE_DOC_URL = "https://docs.google.com/document/d/1wLOP2d6x1gL_wFlWNK_UhilRS3gfSXQYLapCYGw8riU/edit?tab=t.0";
 const CLAY_TABLE_URL = "https://app.clay.com/workspaces/580601/workbooks/wb_0t4gcw0v32bjwPFbHBP/tables/t_0t4gcw2DfQbuRW7YT55/views/gv_0t4gcw2sJpwpQ5zteHZ";
 
@@ -60,8 +61,8 @@ const weeks = [
     label: "Semana 2",
     icon: "\u{1F3AF}",
     title: "Enriquecimiento & Scoring en Clay",
-    loomLabel: null,
-    loomUrl: null,
+    loomLabel: "Training Clay - Enriquecimiento & Scoring",
+    loomUrl: LOOM_URL_2,
     docUrl: GOOGLE_DOC_URL,
     clayUrl: CLAY_TABLE_URL,
     sections: [
@@ -238,7 +239,7 @@ function MapaConceptualOutbound() {
           fontSize: 11, letterSpacing: 3, color: "#f59e0b", textTransform: "uppercase",
           margin: "0 0 8px", fontWeight: 600
         }}>
-          SimpliRoute — Outbound Marketing
+          SimpliRoute â Outbound Marketing
         </p>
         <h1 style={{ fontSize: 32, fontWeight: 700, margin: "0 0 6px", color: "#f1f5f9" }}>
           Mapa Conceptual del Pipeline
@@ -316,7 +317,7 @@ function MapaConceptualOutbound() {
               </h2>
               {week.loomLabel && (
                 <p style={{ fontSize: 12, color: "#f59e0b", margin: "4px 0 0", letterSpacing: 1, textTransform: "uppercase" }}>
-                  Loom — {week.loomLabel}
+                  Loom â {week.loomLabel}
                 </p>
               )}
             </div>
@@ -484,7 +485,7 @@ function MapaConceptualOutbound() {
           gap: 8
         }}>
           <span>Programa de Entrenamiento Outbound {"\u00B7"} SimpliRoute</span>
-          <span>Formato: 1 Loom semanal {"\u00B7"} 4 semanas {"\u00B7"} Documentaci{"\u00F3"}n de soporte incluida</span>
+          <span>Formato: 1 Loom semanal {"\u00B7"} 4 semanas {"\u00B7"} Documentaci{"Ã³"}n de soporte incluida</span>
         </div>
       </div>
     </div>
